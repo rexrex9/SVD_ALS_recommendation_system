@@ -25,11 +25,13 @@ def readDatas():
 class LFM():
     def __init__(self,dataset,factors, epochs, lr, lamda):
         self.dataset = dataset
+
         self.userList, self.itemList = self.__getListMap()
         self.factors=factors
         self.epochs=epochs
         self.lr=lr
         self.lamda=lamda
+
         self.p = pd.DataFrame(np.random.randn(len(self.userList), factors), index=self.userList)
         self.q = pd.DataFrame(np.random.randn(len(self.itemList), factors), index=self.itemList)
         self.bu = pd.DataFrame(np.random.randn(len(self.userList)), index=self.userList)
@@ -85,17 +87,21 @@ class LFM():
             return pickle.load(f)
 
 def play():
-    factors=100
-    epochs=10
-    lr=0.1
-    lamda=0.1
+    factors=100 #隐因子数量
+    epochs=10 #迭代次数
+    lr=0.1 #学习率
+    lamda=0.1 #正则项稀疏
+
     model_path='model/lfm.model'
+
     trainset, testSet = splitTrainSetTestSet(readDatas(),0.2)
 
     #lfm=LFM.load(model_path)
+
     lfm=LFM(trainset,factors, epochs, lr, lamda)
     lfm.fit()
     lfm.save(model_path)
+
     rmse_test = lfm.testRMSE(testSet)
     rmse_train = lfm.testRMSE(trainset)
 

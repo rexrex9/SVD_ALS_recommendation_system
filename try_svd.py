@@ -10,18 +10,17 @@ def svd(data,k):
     u=u[:,0:k]
     i=np.diag(i[0:k])
     v=v[0:k,:]
+
     return u,i,v
 
 def predictSingle(u_index,i_index,u,i,v):
     return u[u_index].dot(i).dot(v.T[i_index].T)
 
 def play():
-    k=2
+    import sys
+    k=4
     data = np.mat([[1,2,3,1,1],[1,3,3,1,2],[3,1,1,2,1],[1,2,3,3,1]])
     u,i,v = svd(data,k)
-
-
-
     print(u.dot(i).dot(v))
     print(predictSingle(0, 0, u, i, v))
 

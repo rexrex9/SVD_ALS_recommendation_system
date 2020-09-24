@@ -14,8 +14,9 @@ def getError(r,pu,qi):
 
 def tryTrain():
     real=np.mat([[1,2,3,0,3],[3,0,3,1,3],[3,2,0,3,1]])
+    print(real)
 
-    factors=4
+    factors=3
     p = np.random.randn(3, factors)
     q = np.random.randn(5, factors)
 
@@ -23,7 +24,8 @@ def tryTrain():
 
     lr=0.05
     lamda=0.1
-    for i in range(30):
+
+    for e in range(30):
         for u in range(ul):
             for i in range(il):
                 r=real[u,i]

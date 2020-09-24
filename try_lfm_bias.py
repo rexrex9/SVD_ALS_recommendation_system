@@ -14,18 +14,21 @@ def getError(r,pu,qi,bu,bi):
 
 def tryTrain():
     real=np.mat([[1,2,3,0,3],[3,0,3,1,3],[3,2,0,3,1]])
+    print(real)
 
     factors=4
     p = np.random.randn(3, factors)
     q = np.random.randn(5, factors)
-    bu = np.random.randn(3)
-    bi = np.random.randn(5)
+    ul, il = real.shape
 
-    ul,il=real.shape
+    bu = np.random.randn(ul)
+    bi = np.random.randn(il)
+
+
 
     lr=0.05
     lamda=0.1
-    for i in range(30):
+    for e in range(30):
         for u in range(ul):
             for i in range(il):
                 r=real[u,i]

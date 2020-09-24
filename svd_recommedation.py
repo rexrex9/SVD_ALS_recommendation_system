@@ -9,6 +9,12 @@ B站:https://space.bilibili.com/497998686
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+import sys
+
+def readDatas():
+    path = 'ml-latest-small/ratings.csv'
+    odatas = pd.read_csv(path,usecols=[0,1,2])
+    return odatas
 
 def splitTrainSetTestSet(odatas):
     testset = odatas.sample(frac=0.2, axis=0)
@@ -17,21 +23,19 @@ def splitTrainSetTestSet(odatas):
 
 def getMatrix(trainset):
     userSet,itemSet = set(),set()
+
     for d in trainset.values:
         userSet.add(int(d[0]))
         itemSet.add(int(d[1]))
 
     userList = list(userSet)
     itemList = list(itemSet)
+
     df = pd.DataFrame(0, index=userList, columns=itemList,dtype=float)
     for d in tqdm(trainset.values):
         df[d[1]][d[0]]=d[2]
-    return df,userList,itemList
 
-def readDatas():
-    path = 'ml-latest-small/ratings.csv'
-    odatas = pd.read_csv(path,usecols=[0,1,2])
-    return odatas
+    return df,userList,itemList
 
 def svd(m,k):
     u, i, v =np.linalg.svd(m)
@@ -42,6 +46,7 @@ def predict(u,i,v,user_index,item_index):
 
 def getPredicts(testSet,userList,itemList,u,i,v):
     y_true,y_hat = [],[]
+
     for d in tqdm(testSet.values):
         user = int(d[0])
         item = int(d[1])
@@ -58,8 +63,10 @@ def play():
     trainset, testSet = splitTrainSetTestSet(readDatas())
     df, userList, itemList = getMatrix(trainset)
     u, i, v = svd(np.mat(df),k)
+
     train_y_true, train_y_hat = getPredicts(trainset, userList, itemList, u, i, v)
     test_y_true, test_y_hat = getPredicts(testSet, userList, itemList,u, i, v)
+
     print(RMSE(train_y_true,train_y_hat))
     print(RMSE(test_y_true,test_y_hat))
 
@@ -69,7 +76,6 @@ def RMSE(a,b):
 
 if __name__ == '__main__':
     play()
-
 
 
 
