@@ -89,8 +89,8 @@ class LFM():
 def play():
     factors=100 #隐因子数量
     epochs=10 #迭代次数
-    lr=0.1 #学习率
-    lamda=0.1 #正则项稀疏
+    lr=0.01 #学习率
+    lamda=0.1 #正则项系数
 
     model_path='model/lfm.model'
 
