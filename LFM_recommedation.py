@@ -1,11 +1,4 @@
-__author__='雷克斯掷骰子'
-'''
-B站:https://space.bilibili.com/497998686
-头条:https://www.toutiao.com/c/user/token/MS4wLjABAAAAAxu8A9lNX1qfkRKEyU9Uecqa2opPcZufDLWHbv7m-hVdMVPOe7r_i-k6nw4RY61i/
-'''
-'''
-数据下载地址：https://grouplens.org/datasets/movielens/
-'''
+
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
