@@ -24,7 +24,7 @@ def loadData(dataFile='ml-latest-small/rating_index.tsv',test_ratio=0.2):
     n_users,n_items=0,0
     testData,n_users,n_items=__getParis(n_users,n_items, testData)
     trainData,n_users,n_items=__getParis(n_users,n_items, trainData)
-    return torch.LongTensor(trainData),torch.LongTensor(testData),n_users+1,n_items+1
+    return trainData,testData,n_users+1,n_items+1
 
 class LFM(nn.Module):
     def __init__(self,n_users,n_items,dim=50):
@@ -41,6 +41,7 @@ class LFM(nn.Module):
         return logit
 
 def doEva(net,d):
+    d=torch.LongTensor(d)
     u, i, r = d[:, 0], d[:, 1], d[:, 2]
     with torch.no_grad():
         out = net(u,i)
@@ -55,15 +56,14 @@ def train(epochs=10,batchSize=1024):
     trainData, testData,n_users,n_items = loadData()
     net=LFM(n_users,n_items,)
     optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, net.parameters()), lr=0.01)
-    loss_fun=torch.nn.BCELoss()
+    criterion=torch.nn.BCELoss()
     for e in range(epochs):
         all_lose=0
-        for d in tqdm(DataLoader(trainData,batch_size=batchSize,shuffle=True)):
+        for u,i,r in tqdm(DataLoader(trainData,batch_size=batchSize,shuffle=True)):
             optimizer.zero_grad()
-            u,i,r = d[:,0],d[:,1],d[:,2]
             r=torch.FloatTensor(r.detach().numpy())
             result = net(u,i)
-            loss = loss_fun(result,r)
+            loss = criterion(result,r)
             all_lose+=loss
             loss.backward()
             optimizer.step()
