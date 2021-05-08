@@ -1,5 +1,7 @@
 # SVD_ALS_recommendation_system
 
+LFM_tradition_batch: numpy 手撸的可以批量训练的LFM
+
 LFM_recommedation.py: numpy手撸的LFM
 
 svd_recommedation.py: numpy手撸的SVD

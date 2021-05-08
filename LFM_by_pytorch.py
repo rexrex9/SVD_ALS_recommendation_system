@@ -5,6 +5,7 @@ import torch
 from tqdm import tqdm
 from sklearn.metrics import precision_score,recall_score,accuracy_score
 
+
 def __getParis(n_users,n_items,dataset):
     ndataset=[]
     for data in dataset:
@@ -15,7 +16,7 @@ def __getParis(n_users,n_items,dataset):
         ndataset.append([u,i,r])
     return ndataset,n_users,n_items
 
-def loadData(dataFile='ml-latest-small/rating_index.tsv',test_ratio=0.2):
+def loadData(dataFile='ml-latest-small/rating_index.tsv',test_ratio=0.1):
     with open(dataFile, 'r', encoding='utf-8') as f:
         allData = f.read().split('\n')
     allData=list(set(filter(None,allData)))
@@ -40,8 +41,8 @@ class LFM(nn.Module):
         logit = self.sigmoid(uv)
         return logit
 
-def doEva(net,d):
-    d=torch.LongTensor(d)
+def doEva( net, d ):
+    d = torch.LongTensor(d)
     u, i, r = d[:, 0], d[:, 1], d[:, 2]
     with torch.no_grad():
         out = net(u,i)
@@ -52,14 +53,14 @@ def doEva(net,d):
     acc =accuracy_score(y_true,y_pred)
     return p,r,acc
 
-def train(epochs=10,batchSize=1024):
+def train(epochs = 10, batchSize = 1024):
     trainData, testData,n_users,n_items = loadData()
     net=LFM(n_users,n_items,)
     optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, net.parameters()), lr=0.01)
     criterion=torch.nn.BCELoss()
     for e in range(epochs):
         all_lose=0
-        for u,i,r in tqdm(DataLoader(trainData,batch_size=batchSize,shuffle=True)):
+        for u,i,r in DataLoader(trainData,batch_size=batchSize,shuffle=True):
             optimizer.zero_grad()
             r=torch.FloatTensor(r.detach().numpy())
             result = net(u,i)
@@ -67,9 +68,9 @@ def train(epochs=10,batchSize=1024):
             all_lose+=loss
             loss.backward()
             optimizer.step()
-        print('epoch{},avg_loss={}'.format(e,all_lose/(len(trainData)//batchSize)))
-        p, r, acc=doEva(net,testData)
-        print('p:{},r:{},acc:{}'.format(round(p,3),round(r,3),round(acc,3)))
+        print('epoch{}, avg_loss={}'.format(e,all_lose/(len(trainData)//batchSize)))
+        p, r, acc = doEva( net, testData )
+        print('p:{}, r:{}, acc:{}'.format(round(p,3),round(r,3),round(acc,3)))
 
 
 train()

@@ -25,10 +25,10 @@ class LFM():
         self.lr=lr
         self.lamda=lamda
 
-        self.p = pd.DataFrame(np.random.randn(len(self.userList), factors), index=self.userList)
-        self.q = pd.DataFrame(np.random.randn(len(self.itemList), factors), index=self.itemList)
-        self.bu = pd.DataFrame(np.random.randn(len(self.userList)), index=self.userList)
-        self.bi = pd.DataFrame(np.random.randn(len(self.itemList)), index=self.itemList)
+        self.p = pd.DataFrame( np.random.randn( len(self.userList), factors ), index = self.userList)
+        self.q = pd.DataFrame( np.random.randn( len(self.itemList), factors ), index = self.itemList)
+        self.bu = pd.DataFrame( np.random.randn( len(self.userList) ), index = self.userList)
+        self.bi = pd.DataFrame( np.random.randn( len(self.itemList) ), index = self.itemList)
 
     def __prediction(self,pu, qi, bu, bi):
         return (np.dot(pu, qi.T) + bu + bi)[0]
@@ -46,14 +46,14 @@ class LFM():
         return userList, itemList
 
     def fit(self):
-        for e in tqdm(range(self.epochs)):
-            for d in self.dataset.values:
+        for e in range(self.epochs):
+            for d in tqdm(self.dataset.values):
                 u, i, r = d[0], d[1], d[2]
-                error = self.__getError(r, self.p.ix[u], self.q.ix[i], self.bu.ix[u], self.bi.ix[i])
-                self.p.ix[u] += self.lr * (error * self.q.ix[i] - self.lamda * self.p.ix[u])
-                self.q.ix[i] += self.lr * (error * self.p.ix[u] - self.lamda * self.q.ix[i])
-                self.bu.ix[u] += self.lr * (error - self.lamda * self.bu.ix[u])
-                self.bi.ix[i] += self.lr * (error - self.lamda * self.bi.ix[i])
+                error = self.__getError(r, self.p.loc[u], self.q.loc[i], self.bu.loc[u], self.bi.loc[i])
+                self.p.loc[u] += self.lr * (error * self.q.loc[i] - self.lamda * self.p.loc[u])
+                self.q.loc[i] += self.lr * (error * self.p.loc[u] - self.lamda * self.q.loc[i])
+                self.bu.loc[u] += self.lr * (error - self.lamda * self.bu.loc[u])
+                self.bi.loc[i] += self.lr * (error - self.lamda * self.bi.loc[i])
 
     def __RMSE(self,a, b):
         return(np.average((np.array(a) - np.array(b)) ** 2)) ** 0.5
@@ -64,7 +64,7 @@ class LFM():
             user = int(d[0])
             item = int(d[1])
             if user in self.userList and item in self.itemList:
-                hat=self.__prediction(self.p.ix[user], self.q.ix[item], self.bu.ix[user], self.bi.ix[item])
+                hat=self.__prediction(self.p.loc[user], self.q.loc[item], self.bu.loc[user], self.bi.loc[item])
                 y_hat.append(hat)
                 y_true.append(d[2])
         rmse = self.__RMSE(y_true,y_hat)
@@ -85,13 +85,13 @@ def play():
     lr=0.01 #学习率
     lamda=0.1 #正则项系数
 
-    model_path='model/lfm.model'
+    model_path = 'model/lfm.model'
 
     trainset, testSet = splitTrainSetTestSet(readDatas(),0.2)
 
     #lfm=LFM.load(model_path)
 
-    lfm=LFM(trainset,factors, epochs, lr, lamda)
+    lfm = LFM(trainset,factors, epochs, lr, lamda)
     lfm.fit()
     lfm.save(model_path)
 

@@ -7,10 +7,9 @@ import numpy as np
 
 def svd(data,k):
     u,i,v = np.linalg.svd(data)
-    u=u[:,0:k]
-    i=np.diag(i[0:k])
-    v=v[0:k,:]
-
+    u = u[:,0:k]
+    i = np.diag(i[0:k])
+    v = v[0:k,:]
     return u,i,v
 
 def predictSingle(u_index,i_index,u,i,v):
