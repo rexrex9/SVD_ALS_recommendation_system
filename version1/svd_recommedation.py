@@ -12,7 +12,7 @@ from tqdm import tqdm
 import sys
 
 def readDatas():
-    path = 'ml-latest-small/ratings.csv'
+    path = '../ml-latest-small/ratings.csv'
     odatas = pd.read_csv(path,usecols=[0,1,2])
     return odatas
 

@@ -15,7 +15,7 @@ https://surprise.readthedocs.io
 '''
 
 def readData():
-    path = 'ml-latest-small/ratings.csv'
+    path = '../ml-latest-small/ratings.csv'
     odatas = pd.read_csv(path, usecols=[0, 1, 2])
     return odatas
 

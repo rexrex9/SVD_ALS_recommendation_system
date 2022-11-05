@@ -11,7 +11,7 @@ def splitTrainSetTestSet(odatas,frac):
     return trainset,testset
 
 def readDatas():
-    path = 'ml-latest-small/ratings.csv'
+    path = '../ml-latest-small/ratings.csv'
     odatas = pd.read_csv(path,usecols=[0,1,2])
     return odatas
 
@@ -85,7 +85,7 @@ def play():
     lr=0.01 #学习率
     lamda=0.1 #正则项系数
 
-    model_path = 'model/lfm.model'
+    model_path = '../model/lfm.model'
 
     trainset, testSet = splitTrainSetTestSet(readDatas(),0.2)
 

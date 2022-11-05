@@ -12,7 +12,7 @@ from pyspark.sql import SparkSession
 from pyspark.ml.recommendation import ALS
 
 spark = SparkSession.builder.appName('alstry').config('spark.executor.memory', '10g').getOrCreate()
-df = spark.read.csv('ml-latest-small/ratings.csv',header=True,schema='user INT, item INT, rating DOUBLE')
+df = spark.read.csv('../ml-latest-small/ratings.csv',header=True,schema='user INT, item INT, rating DOUBLE')
 als = ALS(rank=100, maxIter=10, seed=0,regParam=0.02,alpha=0.005,userCol="user", itemCol="item")
 
 model = als.fit(df)

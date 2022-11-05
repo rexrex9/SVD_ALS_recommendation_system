@@ -52,7 +52,7 @@ def __getParis(n_users,n_items,dataset):
         ndataset.append([u,i,r])
     return ndataset,n_users,n_items
 
-def loadData(dataFile='ml-latest-small/ratings.csv',test_ratio=0.1):
+def loadData(dataFile='../ml-latest-small/ratings.csv',test_ratio=0.1):
     with open(dataFile, 'r', encoding='utf-8') as f:
         allData = f.read().split('\n')
     allData = list(set(filter(None,allData)))
