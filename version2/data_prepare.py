@@ -22,3 +22,6 @@ def loadData(dataFile='../ml-latest-small/ratings.csv',test_ratio=0.1):
     trainData,n_users,n_items=__getParis(n_users,n_items, trainData)
     return trainData,testData,n_users+1,n_items+1
 
+if __name__ == '__main__':
+    trainData,testData,_,_ = loadData()
+    print(trainData[:5])

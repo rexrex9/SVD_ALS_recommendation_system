@@ -8,23 +8,21 @@ import torch
 def train(epochs = 5, batchSize = 1024):
     trainData, testData,n_users,n_items = loadData()
     net=ALS(n_users,n_items,)
-    optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, net.parameters()), lr=0.01)
-    criterion=torch.nn.MSELoss()
+    optimizer = torch.optim.Adam(net.parameters(), lr=0.01)
+    criterion = torch.nn.MSELoss()
     for e in range(epochs):
-        all_lose=0
         for u,i,r in DataLoader(trainData,batch_size=batchSize,shuffle=True):
             optimizer.zero_grad()
-            r=torch.FloatTensor(r.detach().numpy())
+            r = torch.FloatTensor(r.detach().numpy())
             result = net(u,i)
             loss = criterion(result,r)
-            all_lose+=loss
             loss.backward()
             optimizer.step()
 
-        print('epoch{}, avg_loss={}'.format(e,all_lose/(len(trainData)//batchSize)))
+        print('epoch{}, avg_loss={}'.format(e,loss))
         rms = doEva( net,testData )
         print('rms:{}'.format(float(rms)))
-    torch.save(net,'ALS.model')
+    #torch.save(net,'ALS.model')
 
 if __name__ == '__main__':
 
